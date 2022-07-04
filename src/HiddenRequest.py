@@ -22,86 +22,86 @@ from requests import  request
 class HiddenRequest(TorRequest):
     """
     Sessions object that builds on both requests and Torrequests to include a VPN, randomized headers
-    Torrequests has been disabled until I am able to get tor working on pi
+    Each object has reset VPN and Tor
+    VPNs can be disabled
+
 
     """
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.session = requests.Session()
-        self.connected_to_vpn = self.get_vpn_status()
-        self.connected_tor = False
+        self.tor_session = TorRequest(**kwds)
+
         self.initial_ip = self._get_ip()
-        self.max_req_tries = 4
+
         self.proxy_off = False  # False for proxy is on (the requests won't verify otherwise)
         self.sleep_factor = 0
-        self.randomize_empty_headers = True
-        # 1. Ensure VPN is connected
-        self.connected_to_vpn = self.get_vpn_status()
-       
+
+        self.requests_made = 0
+
 
     def _get_ip(self):
         """
             Gets the initial ip for the machine
         """
         try:
-            initial_ip = requests.get("https://ipinfo.io").json()['ip']
-            print("My Original IP Address:", initial_ip)
+            ip = requests.get("https://ipinfo.io").json()['ip']
+            print(f"My Original IP Address:{ip}")
         except Exception as cept:
             print(cept)
             logging.exception("Unable establish initial_ip. Restarting internet/vpn and reattempting...")
             try:
-                self.disconnect_vpn()
-                self.connect_to_vpn()
-                initial_ip = requests.get("https://ipinfo.io").json()['ip']
+                self._disconnect_vpn()
+                self._connect_to_vpn()
+                ip = requests.get("https://ipinfo.io").json()['ip']
             except Exception as cept:
                 print(cept)
                 logging.critical("Unable to establish initial_ip. This will cause fatal error.")
 
-        return initial_ip
+        return ip
 
-    def get_vpn_status(self):
+    def vpn_status(self):
         cmd = 'protonvpn s'
         result = subprocess.check_output(cmd,shell=True)
         if str(result).__contains__("Disconnected"):
-            self.connected_to_vpn=False
+            print(result)
             return False
-        else:
-            self.connected_to_vpn=True
+        elif str(result).__contains__("Connected"):
+            print(result)
             return True
+        else:
+            raise NotImplementedError
 
-    def disconnect_vpn(self):
-        command = 'protonvpn d'
-        p = os.system('echo %s|sudo -S %s' % (self.sudo_pass, command))
-        self.connected_to_vpn=False
+    def _disconnect_vpn(self):
+        command = 'sudo protonvpn d'
+        p = subprocess.check_output(command,shell=True)
+        if str(p).__contains__("Disconnected") or str(p).__contains__("No connection found."):
+            pass
+        else:
+            raise NotImplementedError
 
-    def connect_to_vpn(self):
-        if self.connected_to_vpn is False:
-            _vpnIP = self.initial_ip
-
-            for i in range(0, self.max_req_tries):
-                if _vpnIP == self.initial_ip:
-                    try:
-                        command = 'protonvpn -r c'
-                        p = os.system('echo %s|sudo -S %s' % (self.sudo_pass, command))
-                    except Exception as cept:
-                        print(cept)
-                        logging.exception("Exception: Failed to Initiate VPN Connection...disconnecting and reattempting")
-                        self.disconnect_vpn()
-                    
-            if _vpnIP == self.initial_ip:
-                logging.fatal("FAILED TO INITIATE VPN CONNECTION AFTER MULTIPLE ATTEMPTS... STOP RUNNING PROGRAM..."
-                            "DATA IS EXPOSED THROUGH TOR REQUEST")
-            self.connected_to_vpn=True
-            return _vpnIP
+    def _connect_to_vpn(self):
+        if self.vpn_status() is False:
+            try:
+                command = 'sudo protonvpn -r c'
+                p = subprocess.check_output(command,shell=True)
+            except Exception as e:
+                print(e)
+                logging.fatal("Exception: Failed to Initiate VPN Connection...disconnecting and reattempting")
+                self._disconnect_vpn()
+                raise NotImplementedError
    
     def get(self, *args, **kwargs):
-        return self.session.get(*args, **kwargs)
+        self._connect_to_vpn()
+        self.requests_made += 1
+        return self.tor_session.get(*args, **kwargs)
     
     def post(self, *args, **kwargs):
-        return self.session.post(*args, **kwargs)
+        self._connect_to_vpn()
+        self.requests_made += 1
+        return self.tor_session.post(*args, **kwargs)
 
     @staticmethod
-    def _pick_random_user_agent():
+    def pick_random_user_agent():
         user_agent_list = [
             # Chrome
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
