@@ -1,15 +1,16 @@
 {
+    "terminal.integrated.env.linux": {
+      "PYTHONPATH": "${workspaceFolder}/src:${env:PYTHONPATH}"
+    },
+    "python.envFile": "${workspaceFolder}/.env",
     "python.testing.unittestArgs": [
       "-v",
       "-s",
-      "./test",
+      ".",
       "-p",
       "*test*.py"
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
-    "python.envFile": "${workspaceFolder}/.env",
-    "terminal.integrated.env.linux": {
-      "PYTHONPATH": "${workspaceFolder}"
     }
-  }
+  
