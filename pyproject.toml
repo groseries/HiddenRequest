@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "HiddenRequest"
 version = "0.0.1"
 authors = [
-  {"groseries":"groseries"}
+  {"name"="groseries"}
 ]
 description = "Package that builds on both requests and Torrequests to include a VPN and randomized headers"
 readme = "README.md"
