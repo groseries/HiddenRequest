@@ -2,6 +2,8 @@ LICENSE
 README.md
 pyproject.toml
 setup.py
+src/HiddenRequest/HiddenRequest.py
+src/HiddenRequest/__init.py
 src/HiddenRequest.egg-info/PKG-INFO
 src/HiddenRequest.egg-info/SOURCES.txt
 src/HiddenRequest.egg-info/dependency_links.txt

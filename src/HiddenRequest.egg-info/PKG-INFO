@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
 Name: HiddenRequest
 Version: 0.0.1
-Summary: Package that builds on both requests and Torrequests to include a VPN and randomized headers
-Author: groseries
+Summary: A tool that builds on both requests and Torrequests to include a VPN and randomized headers
+Author: Groseries
 License: Copyright (c) 2018 The Python Packaging Authority
         
         Permission is hereby granted, free of charge, to any person obtaining a copy
