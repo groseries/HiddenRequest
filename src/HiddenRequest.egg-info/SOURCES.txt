@@ -3,9 +3,11 @@ README.md
 pyproject.toml
 setup.py
 src/HiddenRequest/HiddenRequest.py
-src/HiddenRequest/__init.py
+src/HiddenRequest/__init__.py
 src/HiddenRequest.egg-info/PKG-INFO
 src/HiddenRequest.egg-info/SOURCES.txt
 src/HiddenRequest.egg-info/dependency_links.txt
 src/HiddenRequest.egg-info/requires.txt
 src/HiddenRequest.egg-info/top_level.txt
+src/HiddenRequest/test/__init__.py
+src/HiddenRequest/test/test_HiddenRequest.py

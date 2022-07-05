@@ -55,5 +55,5 @@ HiddenRequest also inherits TorRequest methods like `reset_identity`.
 
 ## Testing
 
-	from HiddenRequest import tests
+	pytest --pyargs HiddenRequest	
 		

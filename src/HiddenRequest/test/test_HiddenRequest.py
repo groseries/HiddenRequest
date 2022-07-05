@@ -1,5 +1,5 @@
 import unittest
-from src.HiddenRequest.HiddenRequest import HiddenRequest
+from HiddenRequest.HiddenRequest import HiddenRequest
 
 class TestHiddenRequest(unittest.TestCase):
     
@@ -8,13 +8,10 @@ class TestHiddenRequest(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.client._disconnect_vpn()
-
+    
     def test_disconnect_vpn(self):
         self.client._disconnect_vpn()
         self.assertFalse(self.client.vpn_status)
-    
-    def test_basic_get(self):
-        self.client.get("https://www.google.com")
 
     def test_vpn_status(self):
         self.assertIs(bool,type(self.client.vpn_status))
@@ -36,6 +33,9 @@ class TestHiddenRequest(unittest.TestCase):
     
     def test_verify_hidden(self):
         self.client.verify_hidden()
+
+    def test_basic_get(self):
+        self.client.get("https://www.google.com")
 
         
         

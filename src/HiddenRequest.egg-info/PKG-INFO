@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: HiddenRequest
-Version: 0.0.1
+Version: 0.0.4
 Summary: A tool that builds on both requests and Torrequests to include a VPN and randomized headers
 Author: Groseries
 License: Copyright (c) 2018 The Python Packaging Authority
@@ -88,5 +88,5 @@ HiddenRequest also inherits TorRequest methods like `reset_identity`.
 
 ## Testing
 
-	from HiddenRequest import tests
+	pytest --pyargs HiddenRequest	
 		
