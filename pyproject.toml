@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "HiddenRequest"
 version = "0.0.1"
 authors = [
-  "groseries"
+  {"groseries":"groseries"}
 ]
 description = "Package that builds on both requests and Torrequests to include a VPN and randomized headers"
 readme = "README.md"
@@ -19,5 +19,5 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/pypa/sampleproject"
-"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+"Homepage" = "https://github.com/groseries/HiddenRequest"
+"Bug Tracker" = "https://github.com/groseries/HiddenRequest/issues"
